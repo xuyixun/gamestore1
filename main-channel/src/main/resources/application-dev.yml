@@ -1,0 +1,32 @@
+server:
+ port: 9201
+ servlet:
+  context-path: /channel
+ tomcat:
+  max-threads: 1000
+ connectionTimeout: 180000
+spring:
+ application:
+  name: channel
+ jpa:
+  show-sql: true
+  hibernate:
+   ddl-auto: update
+  database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+ datasource:
+  url: jdbc:mysql://192.168.10.56:3306/channel?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false
+  username: channel
+  password: channel_db18
+ servlet:
+  multipart:
+   max-file-size: -1
+   max-request-size: -1
+ rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: guest
+  password: guest
+logging:
+ level:
+  org.springframework:
+   data: DEBUG

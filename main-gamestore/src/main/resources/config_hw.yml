@@ -1,0 +1,6 @@
+hw:
+  channel:
+    scheme: http
+    host: ijianjian.com
+    url: /hw/channel_notify
+    clickId: 9999

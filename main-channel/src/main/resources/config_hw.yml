@@ -1,0 +1,8 @@
+hw:
+  channel:
+    scheme: http
+    host: ijianjian.com
+    url: /hw/channel_notify
+    clickId: 9999
+  scheduled-ip: 
+   192.168.10.125

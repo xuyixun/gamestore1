@@ -1,0 +1,224 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.5.RELEASE'
+	id 'java'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+ext {
+ guava_v = '20.0'
+ lombok_v='1.18.8'
+ hibernate_v = '5.3.10.Final'
+ http_client_v = '4.5.8'
+ jackson_databind_v = '2.9.8'
+ jjwt_v = '0.9.0'
+ servlet_api_v = '3.1.0'
+ spring_data_v = '2.1.8.RELEASE'
+ spring_security_v = '5.1.5.RELEASE'
+ spring_web_v = '5.1.7.RELEASE'
+ spring_rabbit_v = '2.1.6.RELEASE'
+ swagger2_v = '2.9.2'
+}
+
+subprojects { product ->
+ apply plugin: 'java'
+ apply plugin: 'eclipse'
+ 
+ sourceCompatibility = 1.8
+ version = '0.0.1-SNAPSHOT'
+ compileJava.options.encoding = "UTF-8"
+ 
+ if(product.name == 'main-gamestore' || product.name == 'main-channel'){
+  apply plugin: 'org.springframework.boot'
+  apply plugin: 'io.spring.dependency-management'
+ }
+ 
+ repositories {
+  //jcenter()
+  maven {
+   url 'https://repo.spring.io/libs-milestone'
+  }
+ }
+ 
+ dependencies {
+  if (product.name == 'module-core-common'
+  || product.name == 'module-core-domain'
+  || product.name == 'module-core-security'
+  || product.name == 'module-file'
+  || product.name == 'module-user'
+  || product.name == 'module-game'
+  || product.name == 'module-gamestore-channel'
+  ) {
+   compileOnly("org.projectlombok:lombok:${lombok_v}")
+   annotationProcessor("org.projectlombok:lombok:${lombok_v}")
+  }
+  
+  if(product.name == 'main-gamestore' || product.name == 'main-channel'){
+   runtime 'mysql:mysql-connector-java'
+  }
+ }
+}
+
+//核心
+project(':module-core-common') {
+ dependencies {
+  implementation (
+  "com.fasterxml.jackson.core:jackson-databind:${jackson_databind_v}",
+  "com.google.guava:guava:${guava_v}",
+  "org.apache.httpcomponents:httpclient:${http_client_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}"
+  )
+ }
+}
+project(':module-core-domain') {
+ dependencies {
+  implementation project(":module-core-common")
+  implementation (
+  "com.google.guava:guava:${guava_v}",
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}")
+ }
+}
+project(':module-core-security') {
+ dependencies {
+  implementation project(":module-core-common")
+  implementation project(":module-core-domain")
+  implementation(
+  "com.google.guava:guava:${guava_v}",
+  "io.jsonwebtoken:jjwt:${jjwt_v}",
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}",
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework.security:spring-security-web:${spring_security_v}"
+  )
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}")
+ }
+}
+project(':module-file') {
+ dependencies {
+  implementation project(":module-core-common")
+  implementation project(":module-core-domain")
+  implementation (
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}",
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework:spring-web:${spring_web_v}",
+  "io.springfox:springfox-swagger2:${swagger2_v}"
+  )
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}")
+ }
+}
+project(':module-user') {
+ dependencies {
+  implementation project(":module-core-common")
+  implementation project(":module-core-domain")
+  implementation (
+  "com.fasterxml.jackson.core:jackson-databind:${jackson_databind_v}",
+  "org.apache.httpcomponents:httpclient:${http_client_v}",
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}",
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework:spring-web:${spring_web_v}",
+  "io.springfox:springfox-swagger2:${swagger2_v}"
+  )
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}")
+ }
+}
+project(':module-game') {
+ dependencies {
+  implementation project(":module-core-common")
+  implementation project(":module-core-domain")
+  implementation project(":module-file")
+  implementation project(":gmshell")
+  implementation (
+  "com.fasterxml.jackson.core:jackson-databind:${jackson_databind_v}",
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}",
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework:spring-web:${spring_web_v}",
+  "io.springfox:springfox-swagger2:${swagger2_v}",
+  "net.sf.jmimemagic:jmimemagic:0.1.5"
+  )
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}")
+ }
+}
+project('module-gamestore-channel'){
+ dependencies {
+  implementation project(":module-core-common")
+  implementation project(":module-core-domain")
+  implementation (
+  "com.fasterxml.jackson.core:jackson-databind:${jackson_databind_v}",
+  "org.apache.httpcomponents:httpclient:${http_client_v}",
+  "org.hibernate:hibernate-core:${hibernate_v}",
+  "org.springframework.data:spring-data-jpa:${spring_data_v}",
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework:spring-web:${spring_web_v}",
+  "org.springframework.amqp:spring-rabbit:${spring_rabbit_v}",
+  "io.springfox:springfox-swagger2:${swagger2_v}"
+  )
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}")
+ }
+}
+project(':main-gamestore') {
+ dependencies {
+  implementation project(":module-core-security")
+  implementation project(":module-user")
+  implementation project(":module-game")
+  implementation(
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework.boot:spring-boot-starter-data-jpa",
+  "org.springframework.boot:spring-boot-starter-data-redis",
+  "org.springframework.boot:spring-boot-starter-web",
+  "io.springfox:springfox-swagger2:${swagger2_v}",
+  "io.springfox:springfox-swagger-ui:${swagger2_v}"
+  )
+ }
+}
+project(':main-channel') {
+ dependencies {
+  implementation project(":module-core-security")
+  implementation project(":module-gamestore-channel")
+  implementation(
+  "org.springframework.security:spring-security-config:${spring_security_v}",
+  "org.springframework.boot:spring-boot-starter-data-jpa",
+  "org.springframework.boot:spring-boot-starter-web",
+  "org.springframework.boot:spring-boot-starter-amqp",
+  "io.springfox:springfox-swagger2:${swagger2_v}",
+  "io.springfox:springfox-swagger-ui:${swagger2_v}"
+  )
+ }
+}
+
+/*
+//消息
+project(':module-domain-message') {
+ dependencies {
+  implementation project(":module-core-domain")
+  implementation ("com.aliyun:aliyun-java-sdk-core:${aliyun_core_v}",
+           "com.aliyun:aliyun-java-sdk-dysmsapi:${aliyun_dysmsapi_v}")
+  compileOnly("org.projectlombok:lombok")
+  annotationProcessor ("org.projectlombok:lombok")
+ }
+}
+
+//支付
+project(':module-domain-pay') {
+ dependencies {
+  implementation project(":module-core-domain")
+  compileOnly("javax.servlet:javax.servlet-api:${servlet_api_v}",
+              "org.projectlombok:lombok")
+  annotationProcessor ("org.projectlombok:lombok")
+ }
+}
+*/
+ project(':gmshell') {
+  dependencies {
+   implementation (
+           "dom4j:dom4j:1.6.1"
+   )
+  }
+}

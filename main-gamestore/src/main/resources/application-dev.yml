@@ -1,0 +1,39 @@
+server:
+ port: 9200
+ servlet:
+  context-path: /gamestore
+ tomcat:
+  max-threads: 1000
+ connectionTimeout: 180000
+spring:
+ application:
+  name: gamestore
+ jpa:
+  show-sql: true
+  hibernate:
+   ddl-auto: update
+  database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+ datasource:
+  url: jdbc:mysql://47.75.81.59:3306/appmarket?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false
+  username: market
+  password: market_db18
+ cache:
+  cache-names:
+   - home
+   - column_app
+   - column_general
+   - jwt
+  type: REDIS
+ redis:
+  database: 1
+  host: 192.168.10.56
+  port: 6679
+  password: Info_1Redi
+ servlet:
+  multipart:
+   max-file-size: -1
+   max-request-size: -1
+logging:
+ level:
+  org.springframework:
+   data: DEBUG

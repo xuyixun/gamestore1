@@ -1,0 +1,27 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'gamestore'
+
+include 'module-core-common'
+include 'module-core-domain'
+include 'module-core-security'
+
+include 'module-file'
+
+include 'module-user'
+
+include 'module-game'
+
+include 'module-gamestore-channel'
+
+include 'main-gamestore'
+
+include 'main-channel'
+
+include 'module-gmshell'
+findProject(':module-gmshell')?.name = 'gmshell'
+

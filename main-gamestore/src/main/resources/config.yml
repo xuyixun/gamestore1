@@ -1,0 +1,29 @@
+jwt:
+ header: Authorization
+ token_prefix: 'Bearer '
+ secret: ijianjian
+ expiration_time: 864000000
+file:
+ upload_path_apk: upload
+ upload_path_icon: upload
+ upload_path_ads_picture: upload
+ upload_path_other: upload
+pg:
+ ip: 129.28.168.51
+ port: 8830
+ port_bill: 8820
+ app_secret: v7r0thq9
+ country: 234
+ spid: 300001
+ app_id: 500000
+ product_id: 700000
+ bill_path: upload/pg_bill
+ bill_ip: 129.28.168.51
+rc4:
+ key: ijianjian
+log:
+ enable_request: true
+system_param:
+ admin_live_minute: 5
+ 
+  
